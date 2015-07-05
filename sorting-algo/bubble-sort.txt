@@ -1,0 +1,12 @@
+var arr = [6,5,1,2,3];
+for(var i=0; i<arr.length - 1; i++)
+{
+    var min = arr[i];
+        if(arr[i+1]< min)
+        {
+            min = arr[i+1];
+            arr[i+1] = arr[i];
+            arr[i] = min;
+        }
+    console.log(arr);
+}

@@ -1,0 +1,20 @@
+var i, j = 0;
+var x = [5, 1, 12, -5, 16, 2, -3];
+console.log "The orriginal array is: " x);
+for (i=0; i<x.length/2; i++)
+{
+    var min = x[i+1];
+    for (j=i+1; j< x.length; j++)
+    {
+        if(min > x[j])
+        {
+            min = x[j];
+            var loc = j;
+        }
+    }
+    if (x[i] > x[loc]) {
+    x[loc] = x[i];
+    x[i] = min;
+    }
+}
+    console.log ("The array after selection sort: " x);
