@@ -1,3 +1,5 @@
+// Insertion sort
+
 arr = [6,5,1,2,3];
 for(i = 0; i< arr.length; i++)
 {

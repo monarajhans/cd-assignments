@@ -1,3 +1,4 @@
+// Selection sort
 var i, j = 0;
 var x = [5, 1, 12, -5, 16, 2, -3];
 console.log "The orriginal array is: " x);
