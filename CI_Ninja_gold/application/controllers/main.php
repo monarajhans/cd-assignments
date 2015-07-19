@@ -10,10 +10,8 @@ class Main extends CI_Controller {
 
 	public function index()
 	{
-		$array = array('date'=>date('M, d, y'), 'time'=>date('h:i a'));
-		// var_dump($array);
-		$this->load->view('time', $array);
-	}
-}
+		$this->load->view('index');
+	}	
 
+}
 //end of main controller
