@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script type="text/javascript">
+
+//// DECK OF CARDS OBJECT CONSTRUCTOR
+var Card_Deck = function Card_Deck(){
+  this.deck = [];
+  var suits = ['Spades', 'Clubs', 'Hearts', 'Diamonds'];
+  var pips = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King'];
+  
+  for(var suit in suits){
+    for(var pip in pips){
+      this.deck.push(pips[pip] + ' of ' + suits[suit]);
+    }
+  }
+};
+
+//// DECK OF CARDS PROTOTYPES
+// .shuffle()
+Card_Deck.prototype.shuffle = function(){
+  var m = this.deck.length, t, i;
+  
+  while (m) {
+    i = Math.floor(Math.random() * m--);
+    t = this.deck[m];
+    this.deck[m] = this.deck[i];
+    this.deck[i] = t;
+  }
+
+  return this;
+};
+
+// .reset()
+Card_Deck.prototype.reset = function(){
+  this.deck = [];
+  var suits = ['Spades', 'Clubs', 'Hearts', 'Diamonds'];
+  var pips = ['Ace', 2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King'];
+  
+  for(var suit in suits){
+    for(var pip in pips){
+      this.deck.push(pips[pip] + ' of ' + suits[suit]);
+    }
+  }
+  
+  return this;
+};
+
+// .deal()
+Card_Deck.prototype.deal = function(){
+  return this.deck.pop();
+};
+
+//// PLAYER OBJECT CONSTRUCTOR
+var Player = function Player(name){
+  this.hand = [];
+  this.name = name;
+};
+
+//// PLAYER PROTOTYPES
+// .draw();
+Player.prototype.draw = function(deck){
+  this.hand.push(deck.deal());
+  return this;
+};
+
+// .discard()
+Player.prototype.discard = function(){
+  return this.hand.pop();
+};
+
+// instantiate deck and player objects into variables 
+var cards1 = new Card_Deck();
+var player1 = new Player();
+
+// CHECKING OUR METHODS
+
+// shuffle and return a deck
+console.log(cards1.shuffle().deck);
+
+// player1 drawing two cards from cards1 and return his hand
+console.log(player1.draw(cards1).draw(cards1).hand);
+
+// reset deck1
+console.log(cards1.reset().deck);
+
+// discard a card from player1's hand
+console.log(player1.discard());
+
+</script>
+</head>
+<body>
+
+</body>
+</html>
