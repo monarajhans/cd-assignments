@@ -1,0 +1,34 @@
+<div ng-controller='PollsController'>
+	<a href="#/dashboard">Go to polls</a>
+<h2>{{ polls[0].question }}</h2>
+<p>Click on one answer to vote</p>
+
+<table class="table-striped" style="text-align: center; border: 1px solid black;">
+	    <tr>
+	        <th style="padding: 5px;">Comments</th>
+	        <th style="padding: 5px;">Current number of votes</th>
+	        <th style="padding: 5px;">Action</th>
+	    </tr>
+	    <tr>
+	       	<td style="padding: 5px;">{{ polls[0].option1_option }}</td>
+	       	<td style="padding: 5px;">{{ polls[0].option1_votes }}</td> 
+	        <td style="padding: 5px;"><input type="submit" ng-click="increaseVote(polls[0].option1_option)" value="Vote" class="btn-primary"></td>
+	    </tr>
+	    <tr>
+	       	<td style="padding: 5px;">{{ polls[0].option2_option }}</td>
+	       	<td style="padding: 5px;">{{ polls[0].option2_votes }}</td> 
+	        <td style="padding: 5px;"><input type="submit" ng-click="increaseVote2(polls[0].option2_option)" value="Vote" class="btn-primary"></td>
+	    </tr>  
+	    <tr>
+	       	<td style="padding: 5px;">{{ polls[0].option3_option }}</td>
+	       	<td style="padding: 5px;">{{ polls[0].option3_votes }}</td> 
+	        <td style="padding: 5px;"><input type="submit" ng-click="increaseVote3(polls[0].option3_option)" value="Vote" class="btn-primary"></td>
+	    </tr>  
+	    <tr>
+	       	<td style="padding: 5px;">{{ polls[0].option4_option }}</td>
+	       	<td style="padding: 5px;">{{ polls[0].option4_votes }}</td> 
+	        <td style="padding: 5px;"><input type="submit" ng-click="increaseVote4(polls[0].option4_option)" value="Vote" class="btn-primary"></td>
+	    </tr>      
+    </table>
+
+</div>

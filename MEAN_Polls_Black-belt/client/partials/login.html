@@ -1,0 +1,11 @@
+<div ng-controller="UsersController">
+	<h2>Hello!</h2>
+		<h3>Please enter your name: </h3>
+		<form name="form" class="css-form" novalidate>
+			<input type="text" ng-model="newUser.name" name="name" placeholder="name" required="" />
+				<div ng-show="form.$submitted || form.name.$touched">
+			   		<div ng-show="form.name.$error.required" style="color: red;">You missed entering your name.</div>
+			    </div>
+		</form>
+		<a href="#/dashboard"><input type="submit" ng-click="addUser()" value = "Login" class="btn-primary"></a>
+</div>

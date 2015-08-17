@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html ng-app="blackBelt_app">
+<head>
+	<title>Black Belt</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-local-storage/0.2.2/angular-local-storage.js"></script>
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+  	<script type="text/javascript">
+  		var myApp = angular.module('blackBelt_app', ['ngRoute', 'LocalStorageModule']);
+		myApp.config(function($routeProvider)
+		  {
+		   $routeProvider
+		      .when('/create',{
+		          templateUrl: './../partials/create.html'
+		      })
+		      .when('/dashboard',{
+		          templateUrl: './../partials/dashboard.html'
+		      })
+		      .when('/poll/:id',{
+		          templateUrl: './../partials/poll.html',
+		          controller: 'PollsController'
+		      })
+		      .otherwise({
+		        templateUrl: './../partials/login.html'
+		      });
+		    })
+
+		myApp.factory('UsersFactory', function($http, localStorageService) {
+        var factory = {};
+        var users = [];
+
+        factory.getUsers = function(callback) {
+            $http.get('/users').success(function(output) {
+            users = output;
+            callback(users);
+            });
+        }
+         
+        factory.addUser = function(info, callback) {
+	        details = {name: info.name};
+	        console.log("details", details);
+	        localStorageService.set('current_user', info.name);
+        }
+
+        factory.addPoll = function(info, callback) {
+        	details = {name: localStorageService.get('current_user'),
+         			question: info.question,
+         			created_at: new Date(),
+         			option1_option: info.option1_option,
+         			option1_votes: 0,
+         			option2_option: info.option2_option,
+         			option2_votes: 0,
+         			option3_option: info.option3_option,
+         			option3_votes: 0,
+         			option4_option: info.option4_option,
+         			option4_votes: 0
+         			};
+
+            $http.post('/add_poll', details).success(function() {
+            	users.push({name: localStorageService.get('current_user'),
+		         			question: info.question,
+		         			created_at: new Date(),
+		         			option1_option: info.option1_option,
+		         			option1_votes: 0,
+		         			option2_option: info.option2_option,
+		         			option2_votes: 0,
+		         			option3_option: info.option3_option,
+		         			option3_votes: 0,
+		         			option4_option: info.option4_option,
+		         			option4_votes: 0
+         					});    
+            	callback(users);
+          	});
+         } 
+
+        factory.get_one_poll = function(id, callback) {
+            $http.get('/show_a_poll/' + id).success(function(output) {
+            poll = output;
+            callback(poll);
+            });
+         },
+
+        factory.getPolls = function(callback) {
+            $http.get('/polls').success(function(output) {
+            polls = output;
+            callback(polls);
+            });
+        },
+
+        factory.increaseVote = function(info, callback) {
+        	console.log("info", info);
+        	details = { key: info[0].option1_option };
+	            $http.post('/get_option_by_key', details).success(function() {
+	          	});
+         },
+
+        factory.increaseVote2 = function(info, callback) {
+	        details = { key: info[0].option2_option };
+	        console.log(details);
+	            $http.post('/get_option_by_key_2', details).success(function() {
+	          	});
+        },
+
+        factory.increaseVote3 = function(info, callback) {
+	        details = { key: info[0].option3_option };
+	        console.log(details);
+	            $http.post('/get_option_by_key_3', details).success(function() {
+	          	});
+        },
+
+        factory.increaseVote4 = function(info, callback) {
+	        details = { key: info[0].option4_option };
+	        console.log(details);
+	            $http.post('/get_option_by_key_4', details).success(function() {
+	          	});
+        },
+
+        factory.deletePoll = function(users, callback) {
+            $http.post('/remove', users).success(function(output) {
+            	console.log("users", users);
+            users = output;
+            callback(users);
+            });
+         }
+
+        return factory
+        })
+
+		myApp.controller('UsersController', function($scope, UsersFactory) {
+	        UsersFactory.getUsers(function(data) {
+	        $scope.users = data;
+	        })
+
+	    	$scope.addUser = function() {
+	          UsersFactory.addUser($scope.newUser, function() {
+	          	console.log("$scope.newUser", $scope.newUser);
+	          });
+	        }
+    		});
+
+    	myApp.controller('DashboardsController', function($scope, UsersFactory) {
+        
+	        UsersFactory.getUsers(function(data) {
+	        $scope.users = data;
+	        })
+
+	    	$scope.addPoll = function() {
+		          UsersFactory.addPoll($scope.newPoll, function() {
+		            UsersFactory.getPolls(function(data) {
+		            $scope.polls = data;
+		            });
+		          });
+		            $scope.newPoll = {};
+	        }
+
+	       	$scope.removePoll = function(users){
+	       		$scope.users.splice($scope.users.indexOf(users), 1);
+	            UsersFactory.deletePoll(users, function(data) {
+	            $scope.users = data;
+	            }); 
+	        }
+
+    	});	
+
+    	myApp.controller('PollsController', function($scope, $routeParams, UsersFactory) {
+        	
+        	var id = $routeParams.id;
+	        UsersFactory.getUsers(function(data) {
+	        $scope.users = data;
+	        })
+
+	        UsersFactory.get_one_poll(id, function(data) {
+	        $scope.polls = data;
+	        })
+
+	        $scope.increaseVote = function() {
+	          UsersFactory.increaseVote($scope.polls, function() {
+	            UsersFactory.getPolls(function(data) {
+	            $scope.polls = data;
+	            });
+	          });
+	            $scope.Polls = {};
+	        }
+
+		    $scope.increaseVote2 = function() {
+		          UsersFactory.increaseVote2($scope.polls, function() {
+		          	console.log("$scope.Polls", $scope.polls)
+		            UsersFactory.getPolls(function(data) {
+		            $scope.polls = data;
+		            });
+		          });
+		            $scope.Polls = {};
+		    }
+
+		    $scope.increaseVote3 = function() {
+		          UsersFactory.increaseVote3($scope.polls, function() {
+		          	console.log("$scope.Polls", $scope.polls)
+		            UsersFactory.getPolls(function(data) {
+		            $scope.polls = data;
+		            });
+		          });
+		            $scope.Polls = {};
+		    }
+
+		    $scope.increaseVote4 = function() {
+		          UsersFactory.increaseVote4($scope.polls, function() {
+		          	console.log("$scope.Polls", $scope.polls)
+		            UsersFactory.getPolls(function(data) {
+		            $scope.polls = data;
+		            });
+		          });
+		            $scope.Polls = {};
+		    }
+    	});	
+  	</script>
+</head>
+
+<body ng-controller="UsersController">
+	<div ng-view=""></div>
+</body>
+</html>

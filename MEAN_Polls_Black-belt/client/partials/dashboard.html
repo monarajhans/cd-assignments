@@ -1,0 +1,21 @@
+<div ng-controller='DashboardsController'>
+	
+	<a href="#/create/">Create a new poll</a> | <a href="#/">Logout</a>
+	<h3>Current polls</h3>
+	<p>Search: <input type="text" ng-model="filter_name" placeholder="name"></p>
+	
+	<table class="table-striped" style="text-align: center; border: 1px solid black;">
+	    <tr>
+	        <th style="padding: 5px;">Name</th>
+	        <th style="padding: 5px;">Survey Question</th>
+	        <th style="padding: 5px;">Date posted</th>
+	        <th style="padding: 5px;">Action</th>
+	    </tr>
+	    <tr ng-repeat="user in users | filter:filter_name">
+	       	<td style="padding: 5px;">{{ user.name }}</td> 
+	        <td style="padding: 5px;"><a href="#/poll/{{ user._id }}">{{ user.question }}</a></td>
+	        <td style="padding: 5px;">{{ user.created_at }}</td>
+	        <td style="padding: 5px;"><a href="#/dashboard" ng-click='removePoll(user)'>Remove</a></td>
+	    </tr>    
+    </table>
+</div>
